@@ -9,19 +9,10 @@ app.use(express.json());
 
 // Root route
 app.get("/", (req, res) => {
-  console.log("Root route accessed");
-  res.json({ message: "Welcome to the Auth API", status: "Server is running" });
-});
-
-// Test routes - both GET and POST
-app.get("/test", (req, res) => {
-  console.log("GET /test accessed");
-  res.json({ message: "GET test endpoint working", method: "GET" });
-});
-
-app.post("/test", (req, res) => {
-  console.log("POST /test accessed", req.body);
-  res.json({ message: "POST test endpoint working", method: "POST", data: req.body });
+  res.json({
+    message: "Welcome to the Job Portal API",
+    status: "Server is running",
+  });
 });
 
 // Connect to MongoDB first
@@ -29,8 +20,8 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
-    // Load routes after DB connection
     app.use("/api/auth", require("./routes/authRoutes"));
+    app.use("/api/jobs", require("./routes/jobRoutes"));
   })
   .catch((err) => {
     console.log("MongoDB connection error:", err);

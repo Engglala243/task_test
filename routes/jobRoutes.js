@@ -1,27 +1,20 @@
 const express = require("express");
 const { protect, authorization } = require("../middleware/auth");
+const {
+  createJob,
+  getAllJobs,
+  getJobById,
+} = require("../controllers/jobController");
 
 const router = express.Router();
 
-// Public route - no authentication required
-router.get("/public", (req, res) => {
-  res.json({ message: "This is a public job endpoint" });
-});
+// Create job (Protected - Employer only)
+router.post("/", protect, createJob);
 
-// Protected route - requires authentication
-router.get("/protected", protect, (req, res) => {
-  res.json({ 
-    message: "This is a protected job endpoint",
-    user: req.user 
-  });
-});
+// Get all jobs with filtering (Public)
+router.get("/", getAllJobs);
 
-// Admin only route - requires admin role
-router.get("/admin", protect, authorization("admin"), (req, res) => {
-  res.json({ 
-    message: "This is an admin-only endpoint",
-    user: req.user 
-  });
-});
+// Get single job details (Public)
+router.get("/:id", getJobById);
 
 module.exports = router;
